@@ -108,7 +108,7 @@ use std::path::Path;
 // TODO: remove owned Strings (?)
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "io", serde(rename_all = "PascalCase"))]
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq)]
 pub struct Launchd {
     label: String,
     disabled: Option<bool>,
@@ -127,7 +127,7 @@ pub struct Launchd {
     run_at_load: Option<bool>,
     // RootDirectory: Option<String>, NB: from path
     // WorkingDirectory: Option<String>, NB: from path
-    // EnvironmentVariables: Option<String>
+    environment_variables: Option<plist::Dictionary>,
     // Unmask: Option<u32> NB: check mode_t size in <sys/types.h>
     // TimeOut: Option<u32>
     // ExitTimeOut: Option<u32>
@@ -187,6 +187,7 @@ impl Launchd {
             watch_paths: None,
             queue_directories: None,
             start_on_mount: None,
+            environment_variables: None,
             start_interval: None,
             start_calendar_intervals: None,
         })
@@ -257,6 +258,17 @@ impl Launchd {
 
     pub fn start_on_mount(self) -> Self {
         self.with_start_on_mount(true)
+    }
+
+    pub fn with_environment_variable(mut self, key: String, value: String) -> Self {
+        if self.environment_variables.is_none() {
+            self.environment_variables = Some(Default::default());
+        }
+        if let Some(vars) = &mut self.environment_variables {
+            vars.insert(key, value.into());
+        }
+
+        self
     }
 
     pub fn with_start_interval(mut self, start_interval: u32) -> Self {
@@ -457,6 +469,7 @@ mod tests {
             watch_paths: None,
             queue_directories: None,
             start_on_mount: None,
+            environment_variables: None,
             start_interval: None,
             start_calendar_intervals: None,
         };
