@@ -108,36 +108,37 @@ use std::path::Path;
 // TODO: remove owned Strings (?)
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "io", serde(rename_all = "PascalCase"))]
+#[readonly::make]
 #[derive(Debug, PartialEq)]
 pub struct Launchd {
-    label: String,
-    disabled: Option<bool>,
-    user_name: Option<String>,
-    group_name: Option<String>,
+    pub label: String,
+    pub disabled: Option<bool>,
+    pub user_name: Option<String>,
+    pub group_name: Option<String>,
     // inetdCompatibility: Option<(?)>,
     // LimitLoadToHosts: Option<Vec<String>>,
     // LimitLoadFromHosts: Option<Vec<String>>,
     // LimitLoadToSessionType: Option<String>,
-    program: String,
-    program_arguments: Option<Vec<String>>,
+    pub program: String,
+    pub program_arguments: Option<Vec<String>>,
     // EnableGlobbing: Option<bool>,
     // EnableTransactions: Option<bool>,
     // OnDemand: Option<bool>, NB: deprecated (see KeepAlive)
     // KeepAlive: Option<(?)>,
-    run_at_load: Option<bool>,
+    pub run_at_load: Option<bool>,
     // RootDirectory: Option<String>, NB: from path
     // WorkingDirectory: Option<String>, NB: from path
-    environment_variables: Option<plist::Dictionary>,
+    pub environment_variables: Option<plist::Dictionary>,
     // Unmask: Option<u32> NB: check mode_t size in <sys/types.h>
     // TimeOut: Option<u32>
     // ExitTimeOut: Option<u32>
     // ThrottleInterval: Option<u32>
     // InitGroups: Option<bool>
-    watch_paths: Option<Vec<String>>,
-    queue_directories: Option<Vec<String>>,
-    start_on_mount: Option<bool>,
-    start_interval: Option<u32>,
-    start_calendar_intervals: Option<Vec<CalendarInterval>>,
+    pub watch_paths: Option<Vec<String>>,
+    pub queue_directories: Option<Vec<String>>,
+    pub start_on_mount: Option<bool>,
+    pub start_interval: Option<u32>,
+    pub start_calendar_intervals: Option<Vec<CalendarInterval>>,
     // StandardInPath: Option<String> NB: from path
     // StandardOutPath: Option<String> NB: from path
     // StandardErrorPath: Option<String> NB: from path
